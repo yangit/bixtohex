@@ -1,0 +1,29 @@
+<html>
+<script>
+function calc() {
+  const value = document.getElementById('input').value;
+  const filtered = value.split('').filter(str => str === '0' || str === '1');
+  const wordSize = 8;
+  const length = filtered.length;
+  if ((length === 256 || length === 128) && length % 8 === 0) {
+    let hexString = '';
+    let byte = '';
+    for (let i = 0; i < length / 8; i++) {
+      for (let ii = 0; ii < wordSize; ii++) {
+        byte += filtered.shift();
+      }
+      hexString += parseInt(byte, 2).toString(16);
+      byte = '';
+    }
+    document.getElementById('output').innerText = hexString;
+  } else {
+    document.getElementById('output').innerText = 'Length should be 256 or 128 but is: ' + length;
+  }
+}
+</script>
+<body>
+  <input id='input'  type="text"/><br/>
+  <input onclick="calc()"  type="button" value="Calculate"/><br/>
+  <div id='output'></div>
+</body>
+</html>
