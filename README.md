@@ -1,0 +1,1 @@
+Simple BitToHex conversion tool
