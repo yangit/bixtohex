@@ -1,28 +1,35 @@
 <html>
 <script>
 function calc() {
-  const value = document.getElementById('input').value;
-  const filtered = value.split('').filter(str => str === '0' || str === '1');
+  const value = document.getElementById("input").value;
+  const filtered = value.split("").filter(str => str === "0" || str === "1");
   const wordSize = 8;
   const length = filtered.length;
-  if ((length === 256 || length === 128) && length % 8 === 0) {
-    let hexString = '';
-    let byte = '';
+  // Anything below 128bit is not enough entropy
+  if (length === 256 || length === 128) {
+    let hexString = "";
+    let byte = "";
+    // By changing this line one can reduce the entropy and plant a backdoor!
     for (let i = 0; i < length / 8; i++) {
       for (let ii = 0; ii < wordSize; ii++) {
         byte += filtered.shift();
       }
+      // ParseInt does not work with BigInt, so we have to convert and concatenate byte by byte
       hexString += parseInt(byte, 2).toString(16);
-      byte = '';
+      byte = "";
     }
-    document.getElementById('output').innerText = hexString;
+    document.getElementById("output").innerText = hexString;
   } else {
-    document.getElementById('output').innerText = 'Length should be 256 or 128 but is: ' + length;
+    document.getElementById("output").innerText =
+      "Length should be 256 or 128 but is: " + length;
   }
 }
 </script>
 <body>
-  <input id='input'  type="text"/><br/>
+  Input only 0 and 1 below:<br/>
+  <textarea id='input' cols="50" rows=10>
+  </textarea>
+  <br/>
   <input onclick="calc()"  type="button" value="Calculate"/><br/>
   <div id='output'></div>
 </body>
